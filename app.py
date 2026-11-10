@@ -51,7 +51,9 @@ with gr.Blocks(title="QuickBite Late Order Check") as demo:
             distance_in = gr.Number(label="Distance (km, 0.1 to 30)", value=3.5)
             items_in = gr.Number(label="Items (1 to 20)", value=3, precision=0)
             hour_in = gr.Number(label="Hour of day (10 to 22)", value=13, precision=0)
-            prep_in = gr.Number(label="Preparation time (min, 1 to 60, optional)")
+            prep_in = gr.Number(
+                label="Preparation time (min, 1 to 60, optional)", value=None
+            )
             courier_in = gr.Number(
                 label="Courier experience (months, 0 to 120)", value=12
             )
