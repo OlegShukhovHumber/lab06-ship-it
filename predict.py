@@ -47,3 +47,23 @@ def check_order(order):
     for field, allowed in CHOICES.items():
         if order.get(field) not in allowed:
             raise ValueError(f"{field} must be one of: {', '.join(allowed)}.")
+
+def decide_voucher(probability, threshold):
+    """Offer the voucher when the chance of a late order reaches the threshold."""
+    return probability >= threshold
+
+
+def predict_order(order):
+    """Check one order, score it and return the probability and the decision."""
+    check_order(order)
+    features = NUMERIC_FEATURES + CATEGORICAL_FEATURES
+    row = pd.DataFrame(
+        [{name: order.get(name, math.nan) for name in features}]
+    )
+    row["prep_minutes"] = row["prep_minutes"].astype(float)
+    probability = float(model.predict_proba(row)[0, 1])
+    return {
+        "probability": probability,
+        "voucher": decide_voucher(probability, THRESHOLD),
+        "threshold": THRESHOLD,
+    }
